@@ -58,9 +58,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 // Step 4: the Window Procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc;
-	PAINTSTRUCT ps;
-	RECT rect;
+
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -122,14 +120,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	//Retrieve the applications instance
 	HINSTANCE instance = GetModuleHandle(0);
 	//Set a global Windows Hook to capture keystrokes using the function declared above
-	HHOOK test1 = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, instance, 0);
+	HHOOK kHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, instance, 0);
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0) > 0)
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	UnhookWindowsHookEx(test1);
+	UnhookWindowsHookEx(kHook);
 	return 0;
 }
 
