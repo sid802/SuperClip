@@ -84,14 +84,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
 
+	//Initializing clipBoard array
 	for (int i = 0; i < 10; i++) {
 		*(clipBoard + i) = (LPCWSTR)calloc(256, sizeof(char));
 	}
 
 	WNDCLASSEX wc;
 
-	time_t rawtime;
 
+	//Initializing lastPress
+	time_t rawtime;
 	time(&rawtime);
 	localtime_s(&lastPress, &rawtime);
 
@@ -132,6 +134,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 int SendInputString(LPCWSTR string) {
+
+	//Gets a string and sends every char of it as Input
 	int index = 0;
 
 	while (string[index]){
@@ -164,6 +168,7 @@ char ToUpper(char ch) {
 }
 
 int CopySelectedText(DWORD vkCode) {
+	//copies the selected text to clipboard by sending CTRL + C to the window
 
 	if (OpenClipboard(NULL)) {
 
@@ -173,6 +178,7 @@ int CopySelectedText(DWORD vkCode) {
 
 		localtime_s(&curPress, &rawtime);
 
+		//Checks if a second has passes since last press, to avoid multiple/long presses
 		if (abs(curPress.tm_sec - lastPress.tm_sec) >= 1) {
 
 			lastPress = curPress;
@@ -186,7 +192,7 @@ int CopySelectedText(DWORD vkCode) {
 			cPress.type = INPUT_KEYBOARD;
 
 			cntrl.ki.wVk = VK_CONTROL;
-			cPress.ki.wVk = 0x43;
+			cPress.ki.wVk = 0x43; // 0x43 = C key
 
 			cntrl.ki.dwFlags = KEYEVENTF_UNICODE;
 			cntrl.ki.dwFlags = KEYEVENTF_UNICODE;
@@ -200,7 +206,7 @@ int CopySelectedText(DWORD vkCode) {
 			SendInput(1, &cPress, sizeof(INPUT));
 			SendInput(1, &cntrl, sizeof(INPUT));
 			CloseClipboard();
-			Sleep(100);
+			Sleep(100); //Wait, or else the clipboard won't be updated by the time it is used
 		}
 		if (OpenClipboard(NULL)){
 			HANDLE hClipboardData = GetClipboardData(CF_UNICODETEXT);
