@@ -68,11 +68,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		free(clipBoard);
 		PostQuitMessage(0);
 		break;
-	case WM_PAINT:
-		hdc = BeginPaint(hwnd, &ps);
-		GetClientRect(hwnd, &rect);
-		EndPaint(hwnd, &ps);
-		return 0;
 	default:
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
